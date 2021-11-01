@@ -13,4 +13,5 @@ override.tf.json #Только этот файл
 *_override.tf #Все файлы с окончанием "_override.tf"
 *_override.tf.json #Все файлы с окончанием "_override.tf.json"
 .terraformrc #Все файлы с расширением "terraformrc"
-terraform.rc #Только этот файл
+terraform.rc #Только этот файлновая строка, проверка ветвления
+/новая строка, проверка ветвления
