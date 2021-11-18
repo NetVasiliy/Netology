@@ -45,15 +45,19 @@ Line 221
 **12. Основываясь на знаниях о просмотре текущих (например, PATH) и установке новых переменных; командах, которые мы рассматривали, добейтесь в выводе type -a bash в виртуальной машине наличия первым пунктом в списке**  
   
     ln -s /usr/bin /tmp/new_path_dir
-    PATH=/tmp/new_path_dir:$PATH  
-  
+    PATH=/tmp/new_path_dir:$PATH   
+
+    bash is /tmp/new_path_dir/bash  
+    bash is /usr/bin/bash  
+    bash is /bin/bash  
+
 **13. Чем отличается планирование команд с помощью batch и at?**  
   
-***at      executes commands at a specified time.***   
+at      executes commands at a specified time.  
 ***Выполняет команды в определенное время***  
 
-***batch   executes commands when system load levels permit; in other words, when the load  average  drops  below
-               1.5, or the value specified in the invocation of atd.***  
+batch   executes commands when system load levels permit; in other words, when the load  average  drops  below
+               1.5, or the value specified in the invocation of atd.  
 ***Выполняет команды когда позволяет уровень нагрузки системы.***  
 
 
