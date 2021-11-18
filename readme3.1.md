@@ -53,10 +53,10 @@ Line 221
 
 **13. Чем отличается планирование команд с помощью batch и at?**  
   
-at      executes commands at a specified time.  
+***at***      executes commands at a specified time.  
 ***Выполняет команды в определенное время***  
 
-batch   executes commands when system load levels permit; in other words, when the load  average  drops  below
+***batch***   executes commands when system load levels permit; in other words, when the load  average  drops  below
                1.5, or the value specified in the invocation of atd.  
 ***Выполняет команды когда позволяет уровень нагрузки системы.***  
 
