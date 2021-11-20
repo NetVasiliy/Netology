@@ -10,10 +10,10 @@
     vagrant@vagrant:~$ cat TMP  
     111  
     222  
-    333
-    444 4444 444
-    333
-    444  
+    333  
+    444 4444 444  
+    333  
+    444
     vagrant@vagrant:~$ grep 333 TMP | wc -l   
     2  
     vagrant@vagrant:~$ grep 333 TMP -c  
