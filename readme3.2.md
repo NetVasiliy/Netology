@@ -92,7 +92,7 @@ bash 5>&1 запустит экземпляр bash, в котором 5й дес
 
     vagrant@vagrant:~$ ls ~/tmp2  
     cannot access '/home/vagrant/tmp2': No such file or directory  
-    vrant@vagrant:~$ ls ~/tmp2 6>&2 2>&1 1>&6 | wc -l  
+    varant@vagrant:~$ ls ~/tmp2 6>&2 2>&1 1>&6 | wc -l  
     1  
 Не уверен, что это верно... Не смог выполнить условие: "не потеряв при этом отображение stdout на pty"  
 
