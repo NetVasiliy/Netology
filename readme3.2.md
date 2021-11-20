@@ -100,8 +100,8 @@ bash 5>&1 запустит экземпляр bash, в котором 5й дес
 9. **Что выведет команда cat /proc/$$/environ? Как еще можно получить аналогичный по содержанию вывод?**  
   
   
-    vagrant@vagrant:~$ cat /proc/$$/environ  
-    USER=vagrantLOGNAME=vagrantHOME=/home/vagrantPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/binSHELL=/bin/bashTERM=xterm-256colorXDG_SESSION_ID=1XDG_RUNTIME_DIR=/run/user/1000DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/busXDG_SESSION_TYPE=ttyXDG_SESSION_CLASS=userMOTD_SHOWN=pamLANG=en_US.UTF-8LANGUAGE=en_US:SSH_CLIENT=10.0.2.2 57521 22SSH_CONNECTION=10.0.2.2 57521 10.0.2.15 22SSH_TTY=/dev/pts/0  
+        vagrant@vagrant:~$ cat /proc/$$/environ  
+        USER=vagrantLOGNAME=vagrantHOME=/home/vagrantPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/binSHELL=/bin/bashTERM=xterm-256colorXDG_SESSION_ID=1XDG_RUNTIME_DIR=/run/user/1000DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/busXDG_SESSION_TYPE=ttyXDG_SESSION_CLASS=userMOTD_SHOWN=pamLANG=en_US.UTF-8LANGUAGE=en_US:SSH_CLIENT=10.0.2.2 57521 22SSH_CONNECTION=10.0.2.2 57521 10.0.2.15 22SSH_TTY=/dev/pts/0  
 
 Это переменные окружения  
 Похожий вывод у команды "env"  
