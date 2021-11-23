@@ -15,11 +15,12 @@
     /bin/bash: ELF 64-bit LSB shared object, x86-64
     ```
     **Используя `strace` выясните, где находится база данных `file` на основании которой она делает свои догадки.**  
-   
+     
+
  
-    strace /bin/bash -c 'file /dev/tty'  
-    read(3, "# Magic local data for file(1) c"..., 4096) = 111  
-    openat(AT_FDCWD, "/usr/share/misc/magic.mgc", O_RDONLY) = 3  
+        strace /bin/bash -c 'file /dev/tty'  
+        read(3, "# Magic local data for file(1) c"..., 4096) = 111  
+        openat(AT_FDCWD, "/usr/share/misc/magic.mgc", O_RDONLY) = 3  
 
    /usr/share/misc/magic.mgc
 
