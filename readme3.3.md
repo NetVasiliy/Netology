@@ -63,29 +63,30 @@
 Запустил: sudo opensnoop-bpfcc  
   
 
-    vagrant@vagrant:~$ sudo opensnoop-bpfcc
-    PID    COMM               FD ERR PATH
-    591    irqbalance          6   0 /proc/interrupts
-    591    irqbalance          6   0 /proc/stat
-    591    irqbalance          6   0 /proc/irq/20/smp_affinity
-    591    irqbalance          6   0 /proc/irq/0/smp_affinity
-    591    irqbalance          6   0 /proc/irq/1/smp_affinity
-    591    irqbalance          6   0 /proc/irq/8/smp_affinity
-    591    irqbalance          6   0 /proc/irq/12/smp_affinity
-    591    irqbalance          6   0 /proc/irq/14/smp_affinity
-    591    irqbalance          6   0 /proc/irq/15/smp_affinity
-    811    vminfo              4   0 /var/run/utmp
-    574    dbus-daemon        -1   2 /usr/local/share/dbus-1/system-services
-    574    dbus-daemon        18   0 /usr/share/dbus-1/system-services
-    574    dbus-daemon        -1   2 /lib/dbus-1/system-services
-    574    dbus-daemon        18   0 /var/lib/snapd/dbus-1/system-services/  
+        vagrant@vagrant:~$ sudo opensnoop-bpfcc
+        PID    COMM               FD ERR PATH
+        591    irqbalance          6   0 /proc/interrupts
+        591    irqbalance          6   0 /proc/stat
+        591    irqbalance          6   0 /proc/irq/20/smp_affinity
+        591    irqbalance          6   0 /proc/irq/0/smp_affinity
+        591    irqbalance          6   0 /proc/irq/1/smp_affinity
+        591    irqbalance          6   0 /proc/irq/8/smp_affinity
+        591    irqbalance          6   0 /proc/irq/12/smp_affinity
+        591    irqbalance          6   0 /proc/irq/14/smp_affinity
+        591    irqbalance          6   0 /proc/irq/15/smp_affinity
+        811    vminfo              4   0 /var/run/utmp
+        574    dbus-daemon        -1   2 /usr/local/share/dbus-1/system-services
+        574    dbus-daemon        18   0 /usr/share/dbus-1/system-services
+        574    dbus-daemon        -1   2 /lib/dbus-1/system-services
+        574    dbus-daemon        18   0 /var/lib/snapd/dbus-1/system-services/  
 
      
 
 6. **Какой системный вызов использует `uname -a`? Приведите цитату из man по этому системному вызову, где описывается альтернативное местоположение в `/proc`, где можно узнать версию ядра и релиз ОС.**  
   
   
-    uname()
+        uname()  
+
 Part of the utsname information is also accessible via /proc/sys/kernel/{ostype, hostname, osrelease, version,
        domainname}.
   
