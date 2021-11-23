@@ -123,12 +123,12 @@ Part of the utsname information is also accessible via /proc/sys/kernel/{ostype,
 9. **Используя `-o stat` для `ps`, определите, какой наиболее часто встречающийся статус у процессов в системе. В `man ps` ознакомьтесь (`/PROCESS STATE CODES`) что значат дополнительные к основной заглавной буквы статуса процессов. Его можно не учитывать при расчете (считать S, Ss или Ssl равнозначными).**  
   
 
-	ps -ax -o stat >ps_stat
+    	ps -ax -o stat >ps_stat  
 
-	root@vagrant:/home/vagrant# grep S ps_stat -c
-	59
-	root@vagrant:/home/vagrant# grep I ps_stat -c
-	49
+    	root@vagrant:/home/vagrant# grep S ps_stat -c  
+    	59  
+    	root@vagrant:/home/vagrant# grep I ps_stat -c  
+    	49
 
 `S` - спящий процесс  
 `I` - фоновый процесс  
