@@ -48,12 +48,12 @@
      
   
 
-      root@vagrant:~# root@vagrant:~# sfdisk -d /dev/sdb >sdb_table  
-       root@vagrant:~# cat sdb_table  
-       label: dos  
-       label-id: 0x052a8287   
-       device: /dev/sdb  
-       unit: sectors  
+         root@vagrant:~# root@vagrant:~# sfdisk -d /dev/sdb >sdb_table  
+          root@vagrant:~# cat sdb_table  
+          label: dos  
+          label-id: 0x052a8287   
+          device: /dev/sdb  
+          unit: sectors  
   
        /dev/sdb1 : start=        2048, size=     4194304, type=83  
        /dev/sdb2 : start=     4196352, size=     1046528, type=83  
