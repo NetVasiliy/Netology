@@ -29,7 +29,8 @@
   
       
        fdisk /dev/sdb  
-       ...  
+  
+      ...  
       lsblk  
       NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT  
       sda                    8:0    0   64G  0 disk  
