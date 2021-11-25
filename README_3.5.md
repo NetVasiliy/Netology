@@ -26,24 +26,26 @@
 
 4. **Используя `fdisk`, разбейте первый диск на 2 раздела: 2 Гб, оставшееся пространство.**
   
+  
       
-    fdisk /dev/sdb  
-    ...  
-    lsblk  
-    NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT  
-    sda                    8:0    0   64G  0 disk  
-    ├─sda1                 8:1    0  512M  0 part /boot/efi  
-    ├─sda2                 8:2    0    1K  0 part  
-    └─sda5                 8:5    0 63.5G  0 part  
-      ├─vgvagrant-root   253:0    0 62.6G  0 lvm  /  
-      └─vgvagrant-swap_1 253:1    0  980M  0 lvm  [SWAP]  
-    sdb                    8:16   0  2.5G  0 disk  
-    ├─sdb1                 8:17   0    2G  0 part  
-    └─sdb2                 8:18   0  511M  0 part  
-    sdc                    8:32   0  2.5G  0 disk  
+       fdisk /dev/sdb  
+       ...  
+      lsblk  
+      NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT  
+      sda                    8:0    0   64G  0 disk  
+      ├─sda1                 8:1    0  512M  0 part /boot/efi  
+      ├─sda2                 8:2    0    1K  0 part  
+      └─sda5                 8:5    0 63.5G  0 part  
+        ├─vgvagrant-root   253:0    0 62.6G  0 lvm  /  
+        └─vgvagrant-swap_1 253:1    0  980M  0 lvm  [SWAP]  
+      sdb                    8:16   0  2.5G  0 disk  
+      ├─sdb1                 8:17   0    2G  0 part  
+      └─sdb2                 8:18   0  511M  0 part  
+      sdc                    8:32   0  2.5G  0 disk  
 
 5. **Используя `sfdisk`, перенесите данную таблицу разделов на второй диск.**  
      
+  
 
     root@vagrant:~# root@vagrant:~# sfdisk -d /dev/sdb >sdb_table  
     root@vagrant:~# cat sdb_table  
@@ -233,7 +235,7 @@
   
 Протестировал  
 
-21. Погасите тестовый хост, `vagrant destroy`.
+20. Погасите тестовый хост, `vagrant destroy`.
 
  Убил.
  
