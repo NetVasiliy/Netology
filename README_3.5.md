@@ -130,36 +130,36 @@
 10. **Создайте LV размером 100 Мб, указав его расположение на PV с RAID0.**  
   
   
-       lvcreate -L 100M -n lv1_35 vg_3_5 /dev/md1  
-       lvs  
-         LV     VG        Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert  
-         lv1_35 vg_3_5    -wi-a----- 100.00m  
-         root   vgvagrant -wi-ao---- <62.54g  
-         swap_1 vgvagrant -wi-ao---- 980.00m  
+          lvcreate -L 100M -n lv1_35 vg_3_5 /dev/md1  
+          lvs  
+            LV     VG        Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert  
+            lv1_35 vg_3_5    -wi-a----- 100.00m  
+            root   vgvagrant -wi-ao---- <62.54g  
+            swap_1 vgvagrant -wi-ao---- 980.00m  
 
 
 11. **Создайте `mkfs.ext4` ФС на получившемся LV.**  
   
   
-       mkfs.ext4 -L new35 /dev/vg_3_5/lv1_35  
-       blkid  
-       /dev/mapper/vg_3_5-lv1_35: LABEL="new35" UUID="e9b2bf8b-af82-4929-81a6-2662c35ff757" TYPE="ext4"  
+          mkfs.ext4 -L new35 /dev/vg_3_5/lv1_35  
+          blkid  
+          /dev/mapper/vg_3_5-lv1_35: LABEL="new35" UUID="e9b2bf8b-af82-4929-81a6-2662c35ff757" TYPE="ext4"  
 
 
 12. **Смонтируйте этот раздел в любую директорию, например, `/tmp/new`.**  
   
   
-       mount /dev/vg_3_5/lv1_35 /tmp/new   
+          mount /dev/vg_3_5/lv1_35 /tmp/new   
 
-       root@vagrant:~# mount |grep lv1_35  
-       /dev/mapper/vg_3_5-lv1_35 on /tmp/new type ext4 (rw,relatime,stripe=256)  
+          root@vagrant:~# mount |grep lv1_35  
+          /dev/mapper/vg_3_5-lv1_35 on /tmp/new type ext4 (rw,relatime,stripe=256)  
 
 
 13. **Поместите туда тестовый файл, например `wget https://mirror.yandex.ru/ubuntu/ls-lR.gz -O /tmp/new/test.gz`.**  
     
 
-       ls /tmp/new  
-       lost+found  test.gz  
+          ls /tmp/new  
+          lost+found  test.gz  
 
 
 14. Прикрепите вывод `lsblk`.
@@ -167,61 +167,61 @@
   
          NAME                 MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT  
   
-       sda                    8:0    0   64G  0 disk  
-       ├─sda1                 8:1    0  512M  0 part  /boot/efi  
-       ├─sda2                 8:2    0    1K  0 part  
-       └─sda5                 8:5    0 63.5G  0 part  
-         ├─vgvagrant-root   253:0    0 62.6G  0 lvm   /  
-         └─vgvagrant-swap_1 253:1    0  980M  0 lvm   [SWAP]  
-       sdb                    8:16   0  2.5G  0 disk  
-       ├─sdb1                 8:17   0    2G  0 part  
-       │ └─md0                9:0    0    2G  0 raid1  
-       └─sdb2                 8:18   0  511M  0 part  
-         └─md1                9:1    0 1018M  0 raid0  
-           └─vg_3_5-lv1_35  253:2    0  100M  0 lvm   /tmp/new  
-       sdc                    8:32   0  2.5G  0 disk  
-       ├─sdc1                 8:33   0    2G  0 part  
-       │ └─md0                9:0    0    2G  0 raid1  
-       └─sdc2                 8:34   0  511M  0 part  
-         └─md1                9:1    0 1018M  0 raid0  
-            └─vg_3_5-lv1_35  253:2    0  100M  0 lvm   /tmp/new  
+          sda                    8:0    0   64G  0 disk  
+          ├─sda1                 8:1    0  512M  0 part  /boot/efi  
+          ├─sda2                 8:2    0    1K  0 part  
+          └─sda5                 8:5    0 63.5G  0 part  
+            ├─vgvagrant-root   253:0    0 62.6G  0 lvm   /  
+            └─vgvagrant-swap_1 253:1    0  980M  0 lvm   [SWAP]  
+          sdb                    8:16   0  2.5G  0 disk  
+          ├─sdb1                 8:17   0    2G  0 part  
+          │ └─md0                9:0    0    2G  0 raid1  
+          └─sdb2                 8:18   0  511M  0 part  
+            └─md1                9:1    0 1018M  0 raid0  
+              └─vg_3_5-lv1_35  253:2    0  100M  0 lvm   /tmp/new  
+          sdc                    8:32   0  2.5G  0 disk  
+          ├─sdc1                 8:33   0    2G  0 part  
+          │ └─md0                9:0    0    2G  0 raid1  
+          └─sdc2                 8:34   0  511M  0 part  
+           └─md1                9:1    0 1018M  0 raid0  
+               └─vg_3_5-lv1_35  253:2    0  100M  0 lvm   /tmp/new  
 
 
 15. **Протестируйте целостность файла:**  
   
   
-       root@vagrant:~# gzip -t /tmp/new/test.gz  
-       root@vagrant:~# echo $?  
+         root@vagrant:~# gzip -t /tmp/new/test.gz  
+          root@vagrant:~# echo $?  
 
 
 
 16. **Используя pvmove, переместите содержимое PV с RAID0 на RAID1.**  
      
     
-       root@vagrant:~# pvmove /dev/md1 /dev/md0
-       /dev/md1: Moved: 20.00%
-       /dev/md1: Moved: 100.00%  
+          root@vagrant:~# pvmove /dev/md1 /dev/md0
+          /dev/md1: Moved: 20.00%
+          /dev/md1: Moved: 100.00%  
     
 
 17. **Сделайте `--fail` на устройство в вашем RAID1 md.**  
   
   
-       root@vagrant:~# mdadm --fail /dev/md0 /dev/sdb1  
-       mdadm: set /dev/sdb1 faulty in /dev/md0  
+          root@vagrant:~# mdadm --fail /dev/md0 /dev/sdb1  
+          mdadm: set /dev/sdb1 faulty in /dev/md0  
 
 
 18. **Подтвердите выводом `dmesg`, что RAID1 работает в деградированном состоянии.**  
   
   
-       root@vagrant:~# dmesg |grep md0  
+          root@vagrant:~# dmesg |grep md0  
 
-       [ 2308.856443] md/raid1:md0: not clean -- starting background reconstruction
-       [ 2308.856445] md/raid1:md0: active with 2 out of 2 mirrors
-       [ 2308.856458] md0: detected capacity change from 0 to 2144337920
-       [ 2308.859153] md: resync of RAID array md0
-       [ 2319.230942] md: md0: resync done.
-       [10441.325402] md/raid1:md0: Disk failure on sdb1, disabling device.
-                  md/raid1:md0: Operation continuing on 1 devices.  
+          [ 2308.856443] md/raid1:md0: not clean -- starting background reconstruction
+          [ 2308.856445] md/raid1:md0: active with 2 out of 2 mirrors
+          [ 2308.856458] md0: detected capacity change from 0 to 2144337920
+          [ 2308.859153] md: resync of RAID array md0
+          [ 2319.230942] md: md0: resync done.
+          [10441.325402] md/raid1:md0: Disk failure on sdb1, disabling device.
+                     md/raid1:md0: Operation continuing on 1 devices.  
   
    
 
