@@ -10,26 +10,26 @@
     Ставил последнюю версию 1.3.0
 
 
-      wget https://github.com/prometheus/node_exporter/releases/download/v1.3.0/node_exporter-1.3.0.linux-amd64.tar.gz  
+         wget https://github.com/prometheus/node_exporter/releases/download/v1.3.0/node_exporter-1.3.0.linux-amd64.tar.gz  
  ***unit-файл***  node_exporter.service  
   
   
   
-      root@vagrant:~/node_exporter-1.3.0.linux-amd64# cat /etc/systemd/system/node_exporter.service  
-      [Unit]  
-      Description=Node Exporter Service  
-      After=network.target  
+         root@vagrant:~/node_exporter-1.3.0.linux-amd64# cat /etc/systemd/system/node_exporter.service  
+         [Unit]  
+         Description=Node Exporter Service  
+         After=network.target  
   
-      [Service]  
-      User=nodeusr  
-      Group=nodeusr  
-      Type=simple  
-      ExecStart=/usr/local/bin/node_exporter $EXTRA_OPTS  
-      ExecReload=/bin/kill -HUP $MAINPID  
-      Restart=on-failure  
+         [Service]  
+         User=nodeusr  
+         Group=nodeusr  
+         Type=simple  
+         ExecStart=/usr/local/bin/node_exporter $EXTRA_OPTS  
+         ExecReload=/bin/kill -HUP $MAINPID  
+         Restart=on-failure  
   
-      [Install]  
-      WantedBy=multi-user.target  
+         [Install]  
+         WantedBy=multi-user.target  
   
 После перезагрузки сервис поднялся PID=736  
 После команды `systemctl stop node_exporter` сервис провал из процессов.  
