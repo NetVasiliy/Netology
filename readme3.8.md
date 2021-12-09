@@ -100,5 +100,6 @@ UNCONN        0             0                         127.0.0.1:323             
 
 5. **Используя diagrams.net, создайте L3 диаграмму вашей домашней сети или любой другой сети, с которой вы работали.**  
   
+https://github.com/NetVasiliy/Netology/blob/main/3.8.png  
 
 
