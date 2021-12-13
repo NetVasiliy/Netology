@@ -2,11 +2,14 @@
 
 1. **Установите Bitwarden плагин для браузера. Зарегестрируйтесь и сохраните несколько паролей.**  
   
-`Тут надо ссылку на 3.9.1.png`
+`Тут надо ссылку на 3.9.1.png`   
+https://github.com/NetVasiliy/Netology/blob/main/3.9.1.png
 
 2. **Установите Google authenticator на мобильный телефон. Настройте вход в Bitwarden акаунт через Google authenticator OTP.**  
   
 `Тут надо ссылку на 3.9.2.png и 3.9.2_2.png`  
+https://github.com/NetVasiliy/Netology/blob/main/3.9.2.PNG  
+https://github.com/NetVasiliy/Netology/blob/main/3.9.2_2.PNG
 
 
 4. Установите apache2, сгенерируйте самоподписанный сертификат, настройте тестовый сайт для работы по HTTPS.
