@@ -14,7 +14,7 @@ https://github.com/NetVasiliy/Netology/blob/main/3.9.2_2.PNG
 
 3. **Установите apache2, сгенерируйте самоподписанный сертификат, настройте тестовый сайт для работы по HTTPS.**  
   
-
+https://github.com/NetVasiliy/Netology/blob/main/3.9.3.PNG
 
 5. Проверьте на TLS уязвимости произвольный сайт в интернете.
 
