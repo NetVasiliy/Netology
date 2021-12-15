@@ -77,10 +77,140 @@ vagrant@vagrant:/tmp/testssl.sh$ ./testssl.sh -U --sneaky https://****ech.ru
 
 5. **Установите на Ubuntu ssh сервер, сгенерируйте новый приватный ключ. Скопируйте свой публичный ключ на другой сервер. Подключитесь к серверу по SSH-ключу.**  
   
-  
+Генерим ключ  
+```  
+root@vagrant:/lib/systemd/system# ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa
+Your public key has been saved in /root/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:sMh9x5RRyvvMVgDplDlF6KqmQGqSWziB43PCdy9vhlk root@vagrant
+The key's randomart image is:
++---[RSA 3072]----+
+|          oO+    |
+|         .B=     |
+|      .  +=..    |
+|.  . o o oo. .   |
+|+ . o o S.+   .  |
+|oB     E.. + .   |
+|**oo .+.    =    |
+|o+=..++o   .     |
+|.   .o=o         |
++----[SHA256]-----+  
+```  
+Подключаемся с хостовой машины  
+```  
+admin@LAPTOP-**** MINGW64 ~/.ssh
+$ ssh vagrant@localhost -p 2222
+The authenticity of host '[localhost]:2222 ([127.0.0.1]:2222)' can't be established.
+ED25519 key fingerprint is SHA256:90paTAT5cVlEPHPiY3djy4VxfnJZcyTkjPtK9IgZrGo.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '[localhost]:2222' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-80-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed 15 Dec 2021 01:54:21 PM UTC
+
+  System load:  0.51              Processes:               247
+  Usage of /:   8.1% of 61.31GB   Users logged in:         1
+  Memory usage: 68%               IPv4 address for dummy0: 10.2.2.2
+  Swap usage:   6%                IPv4 address for eth0:   10.0.2.15
+
+87 updates can be applied immediately.
+42 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+
+
+This system is built by the Bento project by Chef Software
+More information can be found at https://github.com/chef/bento
+Last login: Wed Dec 15 13:50:42 2021 from ::1
+vagrant@vagrant:~$
+```
 
  
-7. Переименуйте файлы ключей из задания 5. Настройте файл конфигурации SSH клиента, так чтобы вход на удаленный сервер осуществлялся по имени сервера.
+6. **Переименуйте файлы ключей из задания 5. Настройте файл конфигурации SSH клиента, так чтобы вход на удаленный сервер осуществлялся по имени сервера.**  
+  
+Переименовал  
+```  
+$ ls
+id_rsa_1  id_rsa_1.pub  known_hosts  known_hosts.old  old  
+```  
+Подключился  
+```  
+$ ssh -i id_rsa_1 vagrant@localhost -p 2222
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-80-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed 15 Dec 2021 03:00:07 PM UTC
+
+  System load:  0.15              Processes:               249
+  Usage of /:   8.1% of 61.31GB   Users logged in:         1
+  Memory usage: 69%               IPv4 address for dummy0: 10.2.2.2
+  Swap usage:   6%                IPv4 address for eth0:   10.0.2.15
+
+87 updates can be applied immediately.
+42 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+
+
+This system is built by the Bento project by Chef Software
+More information can be found at https://github.com/chef/bento
+Last login: Wed Dec 15 14:58:07 2021 from 10.0.2.2
+vagrant@vagrant:~$  
+```  
+Создал файл config  
+```  
+$ cat config
+Host vagrant
+ HostName localhost
+ IdentityFile ~/.ssh/id_rsa_1
+ User vagrant
+ Port 2222
+ #StrictHostKeyChecking no
+Host *
+ User default_username
+ IdentityFile ~/.ssh/id_rsa
+ Protocol 2  
+ ```  
+Подключился  
+```  
+$ ssh vagrant
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-80-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed 15 Dec 2021 03:08:14 PM UTC
+
+  System load:  0.03              Processes:               242
+  Usage of /:   8.1% of 61.31GB   Users logged in:         1
+  Memory usage: 69%               IPv4 address for dummy0: 10.2.2.2
+  Swap usage:   6%                IPv4 address for eth0:   10.0.2.15
+
+87 updates can be applied immediately.
+42 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+
+
+This system is built by the Bento project by Chef Software
+More information can be found at https://github.com/chef/bento
+Last login: Wed Dec 15 15:00:07 2021 from 10.0.2.2
+vagrant@vagrant:~$  
+```
 
 8. Соберите дамп трафика утилитой tcpdump в формате pcap, 100 пакетов. Откройте файл pcap в Wireshark.
 
