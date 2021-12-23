@@ -41,11 +41,15 @@
 ```bash  
     while ((1==1))
     do
-    curl http://localhost:9100
+curl http://localhost:9100
     if (($? != 0))
     then
-    date > curl.log
-    else exit
+date > curl.log
+echo 'Connecting...'
+sleep 5
+    else
+echo '!!!OK!!!'
+break
     fi
     done  
 ```
