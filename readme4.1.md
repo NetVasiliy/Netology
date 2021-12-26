@@ -54,54 +54,33 @@ break
     done  
 ```
 
-3. **Необходимо написать скрипт, который проверяет доступность трёх IP: 192.168.0.1, 173.194.222.113, 87.250.250.242 по 80 порту и записывает результат в файл log. Проверять доступность необходимо пять раз для каждого узла.**  
+3. **Необходимо написать скрипт, который проверяет доступность трёх IP: 192.168.0.1, 173.194.222.113, 87.250.250.242 по 80 порту и записывает результат в файл log. Проверять доступность необходимо пять раз для каждого узла.** 
+  
+Использовал хосты не из задания, а реальные. ya.ru, mail.ru, localhost.
   
 ```bash  
 #!/usr/bin/env bash
 i=0
+array_hosts=("ya.ru" "mail.ru" "localhost")
+
   while (($i<5))
   do
-    echo 'ya.ru' >> 413.log
-curl http://ya.ru
+
+    for ah in ${array_hosts[@]}
+      do
+      echo $ah >> 413_DOP.log
+      date >> 413_DOP.log
+curl $ah
   if (($? == 0))
   then
-
-    date >> 413.log
-    echo 'OK' >> 413.log
+      echo 'OK' >> 413_DOP.log
   else
-
-    date >> 413.log
-    echo 'NOT OK' >> 413.log
+      echo 'NOT OK' >> 413_DOP.log
     fi
+      done
 
-    echo 'mail.ru' >> 413.log
-curl http://mail.ru
-  if (($? == 0))
-  then
-
-    date >> 413.log
-    echo 'OK' >> 413.log
-  else
-
-    date >> 413.log
-    echo 'NOT OK' >> 413.log
-    fi
-
-    echo 'localhost' >> 413.log
-curl http://localhost
-  if (($? == 0))
-  then
-
-    date >> 413.log
-    echo 'OK' >> 413.log
-  else
-
-    date >> 413.log
-    echo 'NOT OK' >> 413.log
-    fi
 echo 'Connecting...'
 let "i+=1"
-
   done
   
   ```  
