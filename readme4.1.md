@@ -86,50 +86,32 @@ let "i+=1"
   ```  
 
 
-5. **Необходимо дописать скрипт из предыдущего задания так, чтобы он выполнялся до тех пор, пока один из узлов не окажется недоступным. Если любой из узлов недоступен - IP этого узла пишется в файл error, скрипт прерывается**  
+4. **Необходимо дописать скрипт из предыдущего задания так, чтобы он выполнялся до тех пор, пока один из узлов не окажется недоступным. Если любой из узлов недоступен - IP этого узла пишется в файл error, скрипт прерывается**  
   
 ```bash  
 #!/usr/bin/env bash
-i=0
+
+array_hosts=("ya.ru" "mail.ru" "localhost")
   while ((1==1))
   do
-
-    echo 'ya.ru' >> 414.log
-curl http://ya.ru
+    for ah in ${array_hosts[@]}
+      do
+      echo $ah >> 414_DOP.log
+      date >> 414_DOP.log
+curl $ah
   if (($? == 0))
-  then
-    date >> 414.log
-    echo 'OK' >> 414.log
-  else
-    echo 'ya.ru' >> ERROR414.log
-    break
-    fi
-
-    echo 'mail.ru' >> 413.log
-curl http://mail.ru
-  if (($? == 0))
-  then
-    date >> 413.log
-    echo 'OK' >> 413.log
-  else
-    echo 'mail.ru' >> ERROR414.log
-    break
-    fi
-
-    echo 'localhost' >> 413.log
-curl http://localhost
-  if (($? == 0))
-  then
-    date >> 413.log
-    echo 'OK' >> 413.log
-  else
-    echo 'localhost' >> ERROR414.log
-    break
-    fi
-sleep 1
+    then
+      echo 'OK' >> 414_DOP.log
+    else
+      echo $ah >> ERROR414_DOP.log
+      date >> ERROR414_DOP.log
+      break 2 #break N прерывает цикл, стоящий на N уровней выше -это было познавательно.
+  fi
+     done
+    sleep 1
 echo 'Connecting...'
   done
-  
+ 
   ```  
 
 

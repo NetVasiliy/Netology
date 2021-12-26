@@ -12,11 +12,10 @@ curl $ah
     then
       echo 'OK' >> 414_DOP.log
     else
-    echo $ah >> ERROR414_DOP.log
-    date >> ERROR414_DOP.log
-    break 2
-    #Хочу знать почему break не срабатывает, а 2 срабатывает...
-    fi
+      echo $ah >> ERROR414_DOP.log
+      date >> ERROR414_DOP.log
+      break 2 #break N прерывает цикл, стоящий на N уровней выше -это было познавательно.
+  fi
      done
     sleep 1
 echo 'Connecting...'
