@@ -97,5 +97,46 @@ fatal: not a git repository (or any of the parent directories): .git
 
 4. **Наша команда разрабатывает несколько веб-сервисов, доступных по http. Мы точно знаем, что на их стенде нет никакой балансировки, кластеризации, за DNS прячется конкретный IP сервера, где установлен сервис. Проблема в том, что отдел, занимающийся нашей инфраструктурой очень часто меняет нам сервера, поэтому IP меняются примерно раз в неделю, при этом сервисы сохраняют за собой DNS имена. Это бы совсем никого не беспокоило, если бы несколько раз сервера не уезжали в такой сегмент сети нашей компании, который недоступен для разработчиков. Мы хотим написать скрипт, который опрашивает веб-сервисы, получает их IP, выводит информацию в стандартный вывод в виде: <URL сервиса> - <его IP>. Также, должна быть реализована возможность проверки текущего IP сервиса c его IP из предыдущей проверки. Если проверка будет провалена - оповестить об этом в стандартный вывод сообщением: [ERROR] <URL сервиса> IP mismatch: <старый IP> <Новый IP>. Будем считать, что наша разработка реализовала сервисы: drive.google.com, mail.google.com, google.com.**  
   
+```python
+#!/usr/bin/env python3
 
+import os
+import socket
+import time
 
+host_list2 = {'google.com': 'null', 'ya.ru':'null', 'mail.google.com': 'null', 'drive.google.com':'null'}
+while (1==1):
+    for i in host_list2.keys():
+            print(i + ' - ' + socket.gethostbyname(i))
+            current_ip = socket.gethostbyname(i)
+            if current_ip != host_list2[i]:
+                    old_ip = host_list2[i]
+                    host_list2[i] = current_ip
+                    print('[ERROR]: ' + i + ' IP mismatch ' + old_ip + ' ' + current_ip)
+    time.sleep(2)
+```
+  
+Вывод:  
+```  
+  vagrant@vagrant:~/dz4.2$ ./4.py
+google.com - 74.125.205.113
+[ERROR]: google.com IP mismatch null 74.125.205.113
+ya.ru - 87.250.250.242
+[ERROR]: ya.ru IP mismatch null 87.250.250.242
+mail.google.com - 108.177.14.83
+[ERROR]: mail.google.com IP mismatch null 108.177.14.83
+drive.google.com - 74.125.131.194
+[ERROR]: drive.google.com IP mismatch null 74.125.131.194 
+...  
+После замены в hosts во время выполнения скрипта:
+...  
+google.com - 127.0.0.1
+[ERROR]: google.com IP mismatch 74.125.205.113 127.0.0.1
+ya.ru - 87.250.250.242
+mail.google.com - 108.177.14.83
+drive.google.com - 74.125.131.194
+google.com - 127.0.0.1
+ya.ru - 87.250.250.242
+mail.google.com - 108.177.14.83
+drive.google.com - 74.125.131.194
+  ```
