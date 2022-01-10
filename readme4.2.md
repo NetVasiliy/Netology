@@ -70,6 +70,7 @@ import os
 import sys
 
 param = sys.argv[1]
+print('Где проверяем:' + param)  
 
 bash_command = ["cd " + param, "git status"]
 result_os = os.popen(' && '.join(bash_command)).read()
