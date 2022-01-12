@@ -65,6 +65,27 @@ while True:
 ```  
   
 При запуске скрипта в терминале будет выводиться информация как в домашнем задании 4.2 пункт 4. При этом в директории запуска скрипта появятся 2 файла `4.3.2.yml` и `4.3.2.json` с таким содержимым:  
+Вывод скрипта при запуске:  
+```  
+google.com - 127.0.0.1
+[ERROR]: google.com IP mismatch null 127.0.0.1
+ya.ru - 87.250.250.242
+[ERROR]: ya.ru IP mismatch null 87.250.250.242
+mail.google.com - 142.251.1.19
+[ERROR]: mail.google.com IP mismatch null 142.251.1.19
+drive.google.com - 74.125.131.194
+[ERROR]: drive.google.com IP mismatch null 74.125.131.194
+google.com - 127.0.0.1
+ya.ru - 87.250.250.242
+mail.google.com - 142.251.1.19
+drive.google.com - 74.125.131.194
+google.com - 127.0.0.1
+ya.ru - 87.250.250.242
+mail.google.com - 142.251.1.19
+drive.google.com - 74.125.131.194  
+```  
+  
+YAML файл:
 ```  
 ---
 drive.google.com: 74.125.131.194
@@ -73,6 +94,8 @@ mail.google.com: 142.251.1.19
 ya.ru: 87.250.250.242
 ...  
 ```  
+  
+JSON файл:  
 ```  
 {
   "google.com": "127.0.0.1",
