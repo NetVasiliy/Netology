@@ -60,7 +60,7 @@ while True:
                 with open ('4.3.2.yml', 'w') as yml1:
                         yml1.write(yaml.dump(host_list2, indent=2, explicit_start=True, explicit_end=True))
                 with open ('4.3.2.json', 'w') as json1:
-                        json1.write(json.dumps(host_list2))
+                        json1.write(json.dumps(host_list2, indent=2))
         time.sleep(2)
 ```  
   
@@ -74,8 +74,13 @@ ya.ru: 87.250.250.242
 ...  
 ```  
 ```  
-{"google.com": "127.0.0.1", "ya.ru": "87.250.250.242", "mail.google.com": "142.251.1.19", "drive.google.com": "74.125.131.194"}  
+{
+  "google.com": "127.0.0.1",
+  "ya.ru": "87.250.250.242",
+  "mail.google.com": "142.251.1.17",
+  "drive.google.com": "74.125.131.194"
+}  
 ```  
-Смена информации в файлах при изменении IP адреса сервиса происходит в течение 2 секунд.
+Смена информации в файлах при изменении IP адреса сервиса происходит в течении 2 секунд.
 
 
