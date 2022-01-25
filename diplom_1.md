@@ -10,9 +10,48 @@
   
 ![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_1.PNG)  
 
-2. Установите ufw и разрешите к этой машине сессии на порты 22 и 443, при этом трафик на интерфейсе localhost (lo) должен ходить свободно на все порты.
-3. Установите hashicorp vault ([инструкция по ссылке](https://learn.hashicorp.com/tutorials/vault/getting-started-install?in=vault/getting-started#install-vault)).
-4. Cоздайте центр сертификации по инструкции ([ссылка](https://learn.hashicorp.com/tutorials/vault/pki-engine?in=vault/secrets-management)) и выпустите сертификат для использования его в настройке веб-сервера nginx (срок жизни сертификата - месяц).
+2. **Установите ufw и разрешите к этой машине сессии на порты 22 и 443, при этом трафик на интерфейсе localhost (lo) должен ходить свободно на все порты.**  
+  
+```  
+vagrant@vagrant:~$ sudo ufw enable
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+vagrant@vagrant:~$ sudo ufw show added
+Added user rules (see 'ufw status' for running firewall):
+ufw allow 22
+ufw allow 443
+ufw allow in on lo0
+ufw allow out on lo0  
+```  
+
+3. **Установите hashicorp vault ([инструкция по ссылке](https://learn.hashicorp.com/tutorials/vault/getting-started-install?in=vault/getting-started#install-vault)).**  
+  
+```  
+vagrant@vagrant:~$ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+OK  
+vagrant@vagrant:~$ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"  
+...  
+Reading package lists... Done  
+vagrant@vagrant:~$ sudo apt-get update && sudo apt-get install vault  
+...  
+writing new private key to 'tls.key'
+-----
+Vault TLS key and self-signed certificate have been generated in '/opt/vault/tls'.  
+  ```  
+Проверяем:  
+```  
+vagrant@vagrant:~$ vault
+Usage: vault <command> [args]
+
+Common commands:
+    read        Read data and retrieves secrets  
+    ...    
+   ```
+
+4. **Cоздайте центр сертификации по инструкции ([ссылка](https://learn.hashicorp.com/tutorials/vault/pki-engine?in=vault/secrets-management)) и выпустите сертификат для использования его в настройке веб-сервера nginx (срок жизни сертификата - месяц).**  
+  
+  
+
 5. Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.
 6. Установите nginx.
 7. По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:
