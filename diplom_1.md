@@ -50,9 +50,75 @@ Common commands:
 
 4. **Cоздайте центр сертификации по инструкции ([ссылка](https://learn.hashicorp.com/tutorials/vault/pki-engine?in=vault/secrets-management)) и выпустите сертификат для использования его в настройке веб-сервера nginx (срок жизни сертификата - месяц).**  
   
+Стартуем vault в другом терминале от root:  
+```  
+root@vagrant:~# vault server -dev -dev-root-token-id root
+==> Vault server configuration:
+
+             Api Address: http://127.0.0.1:8200
+                     Cgo: disabled
+         Cluster Address: https://127.0.0.1:8201
+              Go Version: go1.17.5
+              Listener 1: tcp (addr: "127.0.0.1:8200", cluster address: "127.0.0.1:8201", max_request_duration: "1m30s", max_request_size: "33554432", tls: "disabled")
+               Log Level: info
+                   Mlock: supported: true, enabled: false
+           Recovery Mode: false
+                 Storage: inmem
+                 Version: Vault v1.9.2
+             Version Sha: f4c6d873e2767c0d6853b5d9ffc77b0d297bfbdf
+
+==> Vault server started! Log data will stream in below  
+```
+  
+Настраиваем по инструкции для сайта example.com, но меняем время действия на 744 часа:  
+```  
+root@vagrant:~# export VAULT_ADDR=http://127.0.0.1:8200
+root@vagrant:~# export VAULT_TOKEN=root  
+root@vagrant:~# vault secrets enable pki
+Success! Enabled the pki secrets engine at: pki/  
+root@vagrant:~# vault secrets tune -max-lease-ttl=744h pki
+Success! Tuned the secrets engine at: pki/  
+root@vagrant:~# vault write -field=certificate pki/root/generate/internal \
+> common_name="example.com" \
+> ttl=744h > CA_cert.crt  
+root@vagrant:~# vault write pki/config/urls \
+> issuing_certificates="$VAULT_ADDR/v1/pki/ca" \
+> crl_distribution_points="$VAULT_ADDR/v1/pki/crl"
+Success! Data written to: pki/config/urls  
+root@vagrant:~# vault secrets enable -path=pki_int pki
+Success! Enabled the pki secrets engine at: pki_int/
+root@vagrant:~# vault secrets tune -max-lease-ttl=744h pki_int
+Success! Tuned the secrets engine at: pki_int/  
+root@vagrant:~# vault write -format=json pki_int/intermediate/generate/internal \
+> common_name="example.com Intermediate Authority" \
+> | jq -r '.data.csr' > pki_intermediate.csr  
+root@vagrant:~# vault write -format=json pki/root/sign-intermediate csr=@pki_intermediate.csr \
+> format=pem_bundle ttl="744h" \
+> | jq -r '.data.certificate' > intermediate.cert.pem  
+root@vagrant:~# vault write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem
+Success! Data written to: pki_int/intermediate/set-signed  
+root@vagrant:~# vault write pki_int/roles/example-dot-com \
+> allowed_domains="example.com" \
+> allow_subdomains=true \
+> max_ttl="744h"
+Success! Data written to: pki_int/roles/example-dot-com  
+```  
+Создание сертификатов для test.example.com  
+```  
+root@vagrant:~# vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h" > test.
+example.com.crt  
+root@vagrant:~# cat test.example.com.crt | jq -r .data.certificate > test.example.com.crt.pem
+root@vagrant:~# cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.crt.pem
+root@vagrant:~# cat test.example.com.crt | jq -r .data.private_key > test.example.com.crt.key  
+  
+  ```
+  
   
 
-5. Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.
+5. **Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.**  
+  
+  
+
 6. Установите nginx.
 7. По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:
   - можно использовать стандартную стартовую страницу nginx для демонстрации работы сервера;
