@@ -117,7 +117,7 @@ root@vagrant:~# cat test.example.com.crt | jq -r .data.private_key > test.exampl
 
 5. **Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.**  
   
-![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_5.PNG)  
+![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_5.png)  
 
 6. Установите nginx.
 7. По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:
