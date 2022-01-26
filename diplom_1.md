@@ -176,19 +176,31 @@ server {
 Скрипт такой:  
 ```  
 #!/usr/bin/env bash  
+export VAULT_ADDR=http://127.0.0.1:8200
+export VAULT_TOKEN=root  
+  
 vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h" > /tmp/test.example.com.crt  
 cat /tmp/test.example.com.crt | jq -r .data.certificate > /tmp/test.example.com.crt.pem
 cat /tmp/test.example.com.crt | jq -r .data.issuing_ca >> /tmp/test.example.com.crt.pem
 cat /tmp/test.example.com.crt | jq -r .data.private_key > /tmp/test.example.com.crt.key  
 systemctl restart nginx  
 ```
-После запуска скрипта сайт продолжает работать, но меняется дата сетификата:  
+После запуска скрипта сайт продолжает работать, но меняется дата сертификата:  
   
 ![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_9.png)  
 
 10. **Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.**  
   
+`root@vagrant:/tmp# crontab -e`  
+Добавил строку:  
+`1 1 1 * * /tmp/vault.sh`  
+Сертификат будет обновлятся 1 числа каждого месяца в 1:01  
+Для проверки заменил на запуск каждую минуту:  
+`* * * * * /tmp/vault.sh`  
+Результат есть:  
   
+![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_10.png)
+
 
 
 ## Результат
