@@ -119,11 +119,53 @@ root@vagrant:~# cat test.example.com.crt | jq -r .data.private_key > test.exampl
   
 ![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_5.png)  
 
-6. Установите nginx.
-7. По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:
-  - можно использовать стандартную стартовую страницу nginx для демонстрации работы сервера;
-  - можно использовать и другой html файл, сделанный вами;
-8. Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.
+6. **Установите nginx.**  
+  
+Установка и проверка статуса:  
+```  
+vagrant@vagrant:~$ sudo apt install nginx  
+...   
+vagrant@vagrant:~$ systemctl status nginx
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Wed 2022-01-26 12:20:28 UTC; 1min 11s ago
+       Docs: man:nginx(8)
+   Main PID: 4908 (nginx)
+      Tasks: 3 (limit: 1071)
+     Memory: 4.7M
+     CGroup: /system.slice/nginx.service
+             ├─4908 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+             ├─4909 nginx: worker process
+             └─4910 nginx: worker process
+
+Jan 26 12:20:28 vagrant systemd[1]: Starting A high performance web server and a reverse proxy server...
+Jan 26 12:20:28 vagrant systemd[1]: Started A high performance web server and a reverse proxy server.  
+```
+
+7. **По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:**
+  - **можно использовать стандартную стартовую страницу nginx для демонстрации работы сервера;**
+  - **можно использовать и другой html файл, сделанный вами;**  
+  
+Перекинул фалы ключа и сертификата в папку /tmp.  
+Создал файл /var/www/html/index.html.
+В файл /etc/nginx/sites-available/default добавил секцию:  
+```  
+server {
+    listen              443 ssl;
+    server_name         www.example.com;
+    ssl_certificate     /tmp/test.example.com.crt.pem;
+    ssl_certificate_key /tmp/test.example.com.crt.key;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    root /var/www/html;
+    index index.html;
+}  
+```
+
+8. **Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.**  
+  
+![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_8.png)  
+
 9. Создайте скрипт, который будет генерировать новый сертификат в vault:
   - генерируем новый сертификат так, чтобы не переписывать конфиг nginx;
   - перезапускаем nginx для применения нового сертификата.
