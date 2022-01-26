@@ -164,12 +164,32 @@ server {
 
 8. **Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.**  
   
+На локальной машине прописал в файле `hosts`  
+`127.0.0.1	test.example.com`  
+и открыл сайт
 ![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_8.png)  
 
-9. Создайте скрипт, который будет генерировать новый сертификат в vault:
-  - генерируем новый сертификат так, чтобы не переписывать конфиг nginx;
-  - перезапускаем nginx для применения нового сертификата.
-10. Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.
+9. **Создайте скрипт, который будет генерировать новый сертификат в vault:**
+  - **генерируем новый сертификат так, чтобы не переписывать конфиг nginx;**
+  - **перезапускаем nginx для применения нового сертификата.**  
+  
+Скрипт такой:  
+```  
+#!/usr/bin/env bash  
+vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h" > /tmp/test.example.com.crt  
+cat /tmp/test.example.com.crt | jq -r .data.certificate > /tmp/test.example.com.crt.pem
+cat /tmp/test.example.com.crt | jq -r .data.issuing_ca >> /tmp/test.example.com.crt.pem
+cat /tmp/test.example.com.crt | jq -r .data.private_key > /tmp/test.example.com.crt.key  
+systemctl restart nginx  
+```
+После запуска скрипта сайт продолжает работать, но меняется дата сетификата:  
+  
+![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/D_9.png)  
+
+10. **Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.**  
+  
+  
+
 
 ## Результат
 
