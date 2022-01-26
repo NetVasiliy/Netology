@@ -105,8 +105,7 @@ Success! Data written to: pki_int/roles/example-dot-com
 ```  
 Создание сертификатов для test.example.com  
 ```  
-root@vagrant:~# vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h" > test.
-example.com.crt  
+root@vagrant:~# vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h" > test.example.com.crt  
 root@vagrant:~# cat test.example.com.crt | jq -r .data.certificate > test.example.com.crt.pem
 root@vagrant:~# cat test.example.com.crt | jq -r .data.issuing_ca >> test.example.com.crt.pem
 root@vagrant:~# cat test.example.com.crt | jq -r .data.private_key > test.example.com.crt.key  
