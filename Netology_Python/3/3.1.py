@@ -1,18 +1,27 @@
 
 run = True
-count = []
-list = []
+#count = []
+word_list = []
+letter = "d"
 
-def count_letter(list, s) :
-  for s in list :
-    count = [w]
+def count_letter(word_list, letter):
+  result = 0
+  for word in word_list:
+    if letter in word:
+      result += 1
+  return result
 
-while run =True :
-l = input("Введите слово: ")
-  if l !=stop
-    list.append(l)
-  else run = False  
+print(count_letter(['python', 'c++', 'c', 'scala', 'java'], 'c'))
 
-s = input("Введите символ: ")
 
-print(len(count))
+while run :
+  l = input("Введите слово: ")
+  if l != "stop" :
+    word_list.append(l)
+  else :
+    letter = input("Введите символ: ")
+    run = False   
+
+print(count_letter(word_list, letter))
+print(word_list)
+print(letter)
