@@ -44,7 +44,8 @@
 
 - VirtualBox  
   
-![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/5.2.3.PNG)
+![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/5.2.3.PNG)  
+
 
 - Vagrant  
 ```  
