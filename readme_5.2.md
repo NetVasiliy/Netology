@@ -57,13 +57,20 @@ C:\HashiCorp\Virt_05>vagrant --version
 Vagrant 2.2.19  
 ```
 - Ansible
+  
+```  
+ansible --version
+ansible 2.9.6
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 3.8.10 (default, Jun  2 2021, 10:49:15) [GCC 9.4.0]  
+  ```  
 
 *Приложить вывод команд установленных версий каждой из программ, оформленный в markdown.*  
   
-```  
-$ docker --version
-Docker version 20.10.12, build e91ed57  
-```
+
 
 ## Задача 4 (*)
 
