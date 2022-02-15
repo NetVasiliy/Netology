@@ -44,6 +44,10 @@
 
 - VirtualBox  
   
+```  
+C:\Program Files\Oracle\VirtualBox>vboxmanage --version
+6.1.18r142142  
+```  
 ![avatar](https://github.com/NetVasiliy/Netology/blob/main/media/5.2.3.png)  
 
 
@@ -56,7 +60,10 @@ Vagrant 2.2.19
 
 *Приложить вывод команд установленных версий каждой из программ, оформленный в markdown.*  
   
-
+```  
+$ docker --version
+Docker version 20.10.12, build e91ed57  
+```
 
 ## Задача 4 (*)
 
