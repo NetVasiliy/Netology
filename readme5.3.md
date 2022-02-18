@@ -92,7 +92,49 @@ The push refers to repository [docker.io/netvasiliy/nginx5.3.1]
 - Запустите второй контейнер из образа ***debian*** в фоновом режиме, подключив папку ```/data``` из текущей рабочей директории на хостовой машине в ```/data``` контейнера;
 - Подключитесь к первому контейнеру с помощью ```docker exec``` и создайте текстовый файл любого содержания в ```/data```;
 - Добавьте еще один файл в папку ```/data``` на хостовой машине;
-- Подключитесь во второй контейнер и отобразите листинг и содержание файлов в ```/data``` контейнера.
+- Подключитесь во второй контейнер и отобразите листинг и содержание файлов в ```/data``` контейнера.  
+  
+```  
+root@vagrant:~/Netology# mkdir data
+root@vagrant:~/Netology# ls
+5.3  data
+root@vagrant:~/Netology# touch ~/Netology/data/host_system
+root@vagrant:~/Netology# docker pull centos
+root@vagrant:~/Netology# docker pull debian
+
+root@vagrant:~/Netology# docker run -d -v ~/Netology/data:/data 5d0da3dc9764 sleep 9000
+335667a939bfe40d79b83abfaa250f225f4c0a8c6b54fe1a7d6f431a7300eacb
+
+root@vagrant:~/Netology# docker run -d -v ~/Netology/data:/data 04fbdaf87a6a sleep 9000
+c46733797bd3d54f22b6c4890d1ee877551700bf70b07e96851129c49ae3c87a
+
+root@vagrant:~/Netology# docker ps -a
+CONTAINER ID   IMAGE          COMMAND        CREATED          STATUS                      PORTS     NAMES
+6fa14ea9c986   5d0da3dc9764   "sleep 9000"   6 minutes ago    Up 6 minutes                          vibrant_keldysh
+1c7f639c6871   04fbdaf87a6a   "sleep 9000"   6 minutes ago    Up 6 minutes                          hardcore_bhabha
+
+root@vagrant:~/Netology# docker exec -it vibrant_keldysh /bin/bash
+[root@6fa14ea9c986 data]# cat /etc/centos-release
+CentOS Linux release 8.4.2105
+[root@6fa14ea9c986 /]# cd data
+[root@6fa14ea9c986 data]# ls
+host_system
+
+[root@6fa14ea9c986 data]# echo 'Centos' >> centos
+[root@6fa14ea9c986 data]# ls
+centos  host_system
+
+
+root@vagrant:~/Netology# docker exec -it hardcore_bhabha /bin/bash
+root@1c7f639c6871:/# cat /etc/issue
+Debian GNU/Linux 11 \n \l
+
+root@1c7f639c6871:/# cd data/
+root@1c7f639c6871:/data# ls
+centos  host_system
+root@1c7f639c6871:/data# cat centos
+Centos  
+```
 
 ## Задача 4 (*)
 
@@ -104,10 +146,10 @@ https://hub.docker.com/repository/docker/netvasiliy/ansible
 https://hub.docker.com/layers/193006513/netvasiliy/ansible/2.9.24/images/sha256-b65ee781517f7e6706a32371184c75cc8db76301ac52df09864b82afcbeb5222?context=repo  
 
 ```  
+root@vagrant:~/Netology/5.3# docker bild -t netvasiliy/ansible:2.9.24 .
+
 Successfully tagged netvasiliy/ansible:2.9.24
-root@vagrant:~/Netology/5.3# pwd
-/root/Netology/5.3
-root@vagrant:~/Netology/5.3# docker build -t netvasiliy/ansible:2.9.24 .  
+  
 root@vagrant:~/Netology/5.3# docker login -u netvasiliy
 Password:
 WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
