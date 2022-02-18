@@ -7,16 +7,30 @@
 
 ## Задача 1
 
-Используя docker поднимите инстанс PostgreSQL (версию 12) c 2 volume, 
-в который будут складываться данные БД и бэкапы.
+**Используя docker поднимите инстанс PostgreSQL (версию 12) c 2 volume,** 
+**в который будут складываться данные БД и бэкапы.**
 
-Приведите получившуюся команду или docker-compose манифест.
+Приведите получившуюся команду или docker-compose манифест.  
+  
+```  
+root@vagrant:~/Netology/6.2# docker pull postgres:12
+root@vagrant:~/Netology/6.2# mkdir vol1
+root@vagrant:~/Netology/6.2# mkdir vol2
+
+root@vagrant:~/Netology/6.2# docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -ti -p 5432:5432 -v vol_postgres1:/var/lib/postgresql/data1 postgres:12
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+...
+PostgreSQL init process complete; ready for start up.
+
+  
+```
 
 ## Задача 2
 
 В БД из задачи 1: 
-- создайте пользователя test-admin-user и БД test_db
-- в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже)
+- создайте пользователя test-admin-user и БД test_db - `postgres=# CREATE DATABASE test_db;` `test_db=# CREATE ROLE test_admin_user;` 
+- в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже) - `test_db=# CREATE TABLE orders (id SERIAL PRIMARY KEY, наименование TEXT, цена INTEGER);` `test_db=# CREATE TABLE client (id SERIAL PRIMARY KEY, фамилия TEXT, "страна проживания" TEXT UNIQUE, заказ INTEGER, FOREIGN KEY (заказ) REFERENCES orders(id));`
 - предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db
 - создайте пользователя test-simple-user  
 - предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db
@@ -36,7 +50,44 @@
 - итоговый список БД после выполнения пунктов выше,
 - описание таблиц (describe)
 - SQL-запрос для выдачи списка пользователей с правами над таблицами test_db
-- список пользователей с правами над таблицами test_db
+- список пользователей с правами над таблицами test_db  
+  
+```  
+root@vagrant:~/Netology# docker exec -it pg-docker bash
+root@3209349faddf:/# psql -h localhost -p 5432 -U postgres -W
+Password:
+psql (12.10 (Debian 12.10-1.pgdg110+1))
+Type "help" for help.
+
+postgres=# CREATE DATABASE test_db;
+CREATE DATABASE
+postgres=# \l
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ test_db   | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
+(4 rows)
+
+postgres=# \c test_db;
+Password:
+You are now connected to database "test_db" as user "postgres".
+
+test_db=# CREATE ROLE test_admin_user;
+CREATE ROLE
+
+test_db=# CREATE TABLE orders (id SERIAL PRIMARY KEY, наименование TEXT, цена INTEGER);
+CREATE TABLE
+test_db=# CREATE TABLE client (id SERIAL PRIMARY KEY, фамилия TEXT, "страна проживания" TEXT UNIQUE, заказ INTEGER, FOREIGN KEY (заказ) REFERENCES orders(id));
+CREATE TABLE
+
+```  
+  
+
 
 ## Задача 3
 
