@@ -22,18 +22,45 @@ The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
 ...
 PostgreSQL init process complete; ready for start up.
-
-  
+ 
 ```
+  
+Вариант №2  
+```
+root@vagrant:~/Netology/6.2# docker pull postgres:12
+root@vagrant:~/Netology/6.2# mkdir vol1
+root@vagrant:~/Netology/6.2# mkdir vol2
+root@vagrant:~/Netology/6.2# docker run --rm --name pg-docker6.2 -e POSTGRES_PASSWORD=postgres -ti -p 5433:5432 -v ~/Netology/6.2/vol1:/var/lib/postgresql/data -v ~/Netology/6.2/vol2:/var/lib/postgresql/backup postgres:12
+root@vagrant:~# docker exec -it pg-docker6.2 /bin/bash
+root@faa1b3023c35:/# cd /var/lib/postgresql/backup/
+root@faa1b3023c35:/var/lib/postgresql/backup# ls
+root@faa1b3023c35:/var/lib/postgresql/backup# echo test >>'test'
+root@vagrant:~# psql -h localhost -p 5433 -U postgres
+Это не надо тут, он и так есть. Но можно указать другое место. postgres=# CREATE TABLESPACE netology LOCATION '/var/lib/postgresql/data'
 
+
+
+```  
+  
 ## Задача 2
 
 В БД из задачи 1: 
-- создайте пользователя test-admin-user и БД test_db - `postgres=# CREATE DATABASE test_db;` `test_db=# CREATE ROLE test_admin_user;` 
-- в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже) - `test_db=# CREATE TABLE orders (id SERIAL PRIMARY KEY, наименование TEXT, цена INTEGER);` `test_db=# CREATE TABLE client (id SERIAL PRIMARY KEY, фамилия TEXT, "страна проживания" TEXT UNIQUE, заказ INTEGER, FOREIGN KEY (заказ) REFERENCES orders(id));`
-- предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db
-- создайте пользователя test-simple-user  
-- предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db
+- создайте пользователя test-admin-user и БД test_db - `postgres=# CREATE DATABASE test_db;`,`postgres=# \c test_db`, `test_db=# CREATE ROLE test_admin_user LOGIN;` 
+- в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже) - `test_db=# CREATE TABLE orders (id SERIAL PRIMARY KEY, наименование TEXT, цена INTEGER);` `test_db=# CREATE TABLE client (id SERIAL PRIMARY KEY, фамилия TEXT, "страна проживания" TEXT UNIQUE, заказ INTEGER, FOREIGN KEY (заказ) REFERENCES orders(id));`  
+```  
+test_db=# \d
+              List of relations
+ Schema |     Name      |   Type   |  Owner
+--------+---------------+----------+----------
+ public | client        | table    | postgres
+ public | client_id_seq | sequence | postgres
+ public | orders        | table    | postgres
+ public | orders_id_seq | sequence | postgres
+(4 rows)
+```
+- предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db - `test_db=# GRANT ALL ON client, orders TO test_admin_user;`
+- создайте пользователя test-simple-user - `test_db=# CREATE ROLE test_simple_user LOGIN;`  
+- предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE данных таблиц БД test_db - `test_db=# GRANT SELECT, INSERT, UPDATE, DELETE ON client, orders TO test_simple_user;`
 
 Таблица orders:
 - id (serial primary key)
@@ -47,21 +74,9 @@ PostgreSQL init process complete; ready for start up.
 - заказ (foreign key orders)
 
 Приведите:
-- итоговый список БД после выполнения пунктов выше,
-- описание таблиц (describe)
-- SQL-запрос для выдачи списка пользователей с правами над таблицами test_db
-- список пользователей с правами над таблицами test_db  
-  
+- итоговый список БД после выполнения пунктов выше,  
 ```  
-root@vagrant:~/Netology# docker exec -it pg-docker bash
-root@3209349faddf:/# psql -h localhost -p 5432 -U postgres -W
-Password:
-psql (12.10 (Debian 12.10-1.pgdg110+1))
-Type "help" for help.
-
-postgres=# CREATE DATABASE test_db;
-CREATE DATABASE
-postgres=# \l
+test_db=# \l
                                  List of databases
    Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
 -----------+----------+----------+------------+------------+-----------------------
@@ -72,22 +87,47 @@ postgres=# \l
            |          |          |            |            | postgres=CTc/postgres
  test_db   | postgres | UTF8     | en_US.utf8 | en_US.utf8 |
 (4 rows)
-
-postgres=# \c test_db;
-Password:
-You are now connected to database "test_db" as user "postgres".
-
-test_db=# CREATE ROLE test_admin_user;
-CREATE ROLE
-
-test_db=# CREATE TABLE orders (id SERIAL PRIMARY KEY, наименование TEXT, цена INTEGER);
-CREATE TABLE
-test_db=# CREATE TABLE client (id SERIAL PRIMARY KEY, фамилия TEXT, "страна проживания" TEXT UNIQUE, заказ INTEGER, FOREIGN KEY (заказ) REFERENCES orders(id));
-CREATE TABLE
-
+```
+- описание таблиц (describe)  
+```
+test_db=# \dt
+         List of relations
+ Schema |  Name  | Type  |  Owner
+--------+--------+-------+----------
+ public | client | table | postgres
+ public | orders | table | postgres
+(2 rows)
+```
+- SQL-запрос для выдачи списка пользователей с правами над таблицами test_db - `test_db=# SELECT * FROM information_schema.table_privileges WHERE table_catalog = 'test_db' AND grantee IN ('test_admin_user','test_simple_user') ORDER BY 2;`
+- список пользователей с правами над таблицами test_db  
 ```  
+ grantor  |     grantee      | table_catalog | table_schema | table_name | privilege_type | is_grantable | with_hierarchy
+----------+------------------+---------------+--------------+------------+----------------+--------------+----------------
+ postgres | test_admin_user  | test_db       | public       | client     | INSERT         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | client     | SELECT         | NO           | YES
+ postgres | test_admin_user  | test_db       | public       | client     | UPDATE         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | client     | DELETE         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | client     | TRUNCATE       | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | client     | REFERENCES     | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | client     | TRIGGER        | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | INSERT         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | SELECT         | NO           | YES
+ postgres | test_admin_user  | test_db       | public       | orders     | UPDATE         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | DELETE         | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | TRUNCATE       | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | REFERENCES     | NO           | NO
+ postgres | test_admin_user  | test_db       | public       | orders     | TRIGGER        | NO           | NO
+ postgres | test_simple_user | test_db       | public       | orders     | INSERT         | NO           | NO
+ postgres | test_simple_user | test_db       | public       | client     | INSERT         | NO           | NO
+ postgres | test_simple_user | test_db       | public       | client     | SELECT         | NO           | YES
+ postgres | test_simple_user | test_db       | public       | client     | UPDATE         | NO           | NO
+ postgres | test_simple_user | test_db       | public       | client     | DELETE         | NO           | NO
+ postgres | test_simple_user | test_db       | public       | orders     | SELECT         | NO           | YES
+ postgres | test_simple_user | test_db       | public       | orders     | UPDATE         | NO           | NO
+ postgres | test_simple_user | test_db       | public       | orders     | DELETE         | NO           | NO
+(22 rows)
+```
   
-
 
 ## Задача 3
 
