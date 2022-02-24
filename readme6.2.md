@@ -247,13 +247,25 @@ ERROR:  insert or update on table "client" violates foreign key constraint "clie
 DETAIL:  Key (заказ)=(6) is not present in table "orders".
 ```  
 
+```  
+test_db=# select cl.фамилия, cl.заказ, ord.наименование from client cl FULL JOIN orders ord ON cl.заказ = ord.id WHERE cl.заказ IS NOT NULL;
+       фамилия        | заказ | наименование
+----------------------+-------+--------------
+ Иванов Иван Иванович |     3 | Книга
+ Петров Петр Петрович |     4 | Монитор
+ Иоганн Себастьян Бах |     5 | Гитара
+(3 rows)
+```
+
+
 ## Задача 5
 
 Получите полную информацию по выполнению запроса выдачи всех пользователей из задачи 4 
 (используя директиву EXPLAIN).
 
 Приведите получившийся результат и объясните что значат полученные значения.  
-  
+
+Вариант 1.  
 ```  
 test_db=# EXPLAIN SELECT фамилия FROM client WHERE заказ IS NOT NULL;
                         QUERY PLAN
@@ -262,13 +274,27 @@ test_db=# EXPLAIN SELECT фамилия FROM client WHERE заказ IS NOT NULL
    Filter: ("заказ" IS NOT NULL)
 (2 rows)
 ```  
+Вариант 2.
+```  
+test_db=# EXPLAIN select cl.фамилия, cl.заказ, ord.наименование from client cl FULL JOIN orders ord ON cl.заказ = ord.id WHERE cl.заказ IS NOT NULL;
+                                QUERY PLAN
+---------------------------------------------------------------------------
+ Hash Left Join  (cost=37.00..57.23 rows=806 width=68)
+   Hash Cond: (cl."заказ" = ord.id)
+   ->  Seq Scan on client cl  (cost=0.00..18.10 rows=806 width=36)
+         Filter: ("заказ" IS NOT NULL)
+   ->  Hash  (cost=22.00..22.00 rows=1200 width=36)
+         ->  Seq Scan on orders ord  (cost=0.00..22.00 rows=1200 width=36)
+(6 rows)
+```
+
 Показывает стоимость запроса, ожидаемое число строк, средний вес строки в байтах и то, что произошла фильтрация по полю "заказ".
 
 ## Задача 6
 
 Создайте бэкап БД test_db и поместите его в volume, предназначенный для бэкапов (см. Задачу 1).  
 
-Вариант 1.  
+  
 ```  
 root@vagrant:~# docker exec -it pg-docker6.2 /bin/bash
 root@df23bc3303f3:/# pg_dump -U postgres test_db > /var/lib/postgresql/backup/test_db.dump
