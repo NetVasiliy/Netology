@@ -124,10 +124,12 @@ DETAIL:  Partition key of the failing row contains (price) = (499).
 ```
 ALTER TABLE orders_1 ADD CONSTRAINT orders_1_unique UNIQUE (title)
 ALTER TABLE orders_2 ADD CONSTRAINT orders_2_unique UNIQUE (title)
-```
+```  
+
 Но тогда может быть одинаковый "title", если цена оного меньше 499, а другого больше 500... ХМ...  
 Пока не понял, через триггеры для меня пока сложно. Да и если при каждой вставке шерстить таблицу на уникальность "title", будет есть много лишних ресурсов.  
-Будет время, надо покопать...
+Будет время, надо покопать...  
+
 ---
 
 ### Как cдавать задание
